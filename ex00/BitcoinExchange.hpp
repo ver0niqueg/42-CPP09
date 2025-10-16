@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:51:31 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/14 18:09:49 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/16 18:15:52 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,22 +22,22 @@
 
 class BitcoinExchange
 {
-    private:
-        std::map<std::string, float> _database;
+	private:
+		std::map<std::string, float> _database;
 
-        std::string trim(const std::string& str);
-        bool isValidDate(const std::string& date);
-        bool isValidNumber(const std::string &str, float& value);
+		std::string trim(const std::string& str);
+		bool isValidDate(const std::string& date);
+		bool isValidNumber(const std::string &str, float& value);
 
-    public:
-        BitcoinExchange();
-        BitcoinExchange(const BitcoinExchange &copy);
-        BitcoinExchange& operator=(const BitcoinExchange &other);
-        ~BitcoinExchange();
+	public:
+		BitcoinExchange();
+		BitcoinExchange(const BitcoinExchange &copy);
+		BitcoinExchange& operator=(const BitcoinExchange &other);
+		~BitcoinExchange();
 
-        bool loadDatabase(const std::string filename);
-        float getPrice(const std::string& data) const;
-        void processInput(const std::string& filename);
+		bool loadDatabase(const std::string filename);
+		float getPrice(const std::string& date) const;
+		void processInput(const std::string& filename);
 };
 
 #endif
