@@ -34,17 +34,17 @@ class PmergeMe
 		bool isValidNumber(const std::string& str);
 		void parseInput(int argc, char** argv);
 
-		// vector
-		void fordJonhsonVector(std::vector<int>& arr);
-		void insertionVector(std::vector<int>& arr, int left, int right);
-		void mergeVector(std::vector<int>& arr, int left, int mid, int right);
+		template <typename Container>
+		void fordJonhson(Container& arr);
 
-		// deque
-		void fordJonhsonDeque(std::deque<int>& arr);
-		void insertionDeque(std::deque<int>& arr, int left, int right);
-		void mergeDeque(std::deque<int> arr, int left, int mid, int right);
+		template <typename Container>
+		void insertion(Container& arr, int left, int right);
 
-		void printSequence(const std::string& prefic, const std::vector<int>& data, size_t maxDisplay);
+		template <typename Container>
+		void merge(Container& arr, int left, int mid, int right);
+
+		template <typename Container>
+		void printSequence(const std::string& prefix, const Container& data, size_t maxDisplay);
 
 	public:
 		PmergeMe();
@@ -54,5 +54,6 @@ class PmergeMe
 
 		void run(int argc, char** argv);
 };
+
 
 #endif
