@@ -15,6 +15,7 @@ BLUE   = \033[34m
 
 # Source files
 SRCS = main.cpp \
+		RPN.cpp \
 
 # Object files inside obj/
 OBJS = $(SRCS:%.cpp=$(OBJDIR)/%.o)
