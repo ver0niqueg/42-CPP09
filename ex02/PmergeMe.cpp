@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/21 17:29:35 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/21 18:39:04 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,7 +97,7 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
     }
 }
 
-// VECTOR IMPLEMENTATION //
+// ============= [ VECTOR IMPLEMENTATION ] =============/
 
 // recherche dichotomique (binary search) pour trouver la position exacte d'insertion
 size_t PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, size_t end)
@@ -260,11 +260,53 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
     arr = mainChain;
 }
 
-// DEQUE IMPLEMENTATION //
+// ============= [ DEQUE IMPLEMENTATION ] =============/
 // duplication, no generic implementation
 
 
+// ============= [ DISPLAY ] =============/
+template <typename Container>
+void PmergeMe::printSequence(const std::string& prefix, const Container&, size_t maxDisplay = 5)
+{
+    std::cout << prefix;
+    size_t displayCount = (data.size() > maxDisplay) ? maxDisplay : data.size(); // ajustement
+    for (size_t i = 0; i < displaycount; i++)
+    {
+            std::cout << data[i];
+            if (i < displayCount - 1)
+                std::cout << " ";
+    }
 
+    if (data.size() > maxDisplay)
+        std::cout << "[...]" << std::endl;
+}
 
+// ============= [ RUN ] =============/
 
+void PmergeMe::run(int argc, char** argv)
+{
+    parseInput(argc, argv);
+
+    printSequence("Before: ", _vectorData, 5);
+
+    struct timeval start, end;
+    gettimeofday(&start, NULL);
+
+    fordJohnsonVector(_vectorData);
+
+    gettimeofday(&end, NULL);
+    double vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0;
+    vectorTime += (end.tv_usec - start.tv_usec);
+
+    gettimeofday(&end, NULL);
+
+    fordJohnsonVector(_dequeData);
+
+    gettimeofday(&end, NULL);
+    double dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0;
+    dequeTime += (end.tv_usec - start.tv_usec);
+
+    printSequence("After: ", _vectorData, 5);
+    
+}
 
