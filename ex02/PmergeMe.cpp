@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/21 18:39:04 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/21 20:24:07 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -307,6 +307,11 @@ void PmergeMe::run(int argc, char** argv)
     dequeTime += (end.tv_usec - start.tv_usec);
 
     printSequence("After: ", _vectorData, 5);
-    
+
+    std::cout << std::fixed << std::setprecision(5);
+    std::cout << "Time to process a range of " << _vectorData.size()
+        << " elements with std::vector : " << vectorTime << " us" << std::endl;
+    std::cout << "Time to process a range of " << _dequeData.size()
+        << " elements with std::quede : " << dequeTime << " us" << std::endl;
 }
 
