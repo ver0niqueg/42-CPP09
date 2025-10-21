@@ -34,25 +34,30 @@ class PmergeMe
 		bool isValidNumber(const std::string& str);
 		void parseInput(int argc, char** argv);
 
+		std::vector<size_t> generateJacobsthalSequence(size_t n);
+
 		// vector
 		void fordJohnsonVector(std::vector<int>& arr);
-    	void insertionSortVector(std::vector<int>& arr, int left, int right);
-    	void mergeVector(std::vector<int>& arr, int left, int mid, int right);
+    	std::vector<int> mergePairsVector(std::vector<std::pair<int, int> >& pairs);
+    	void insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pend);
+    	size_t binarySearchVector(const std::vector<int>& arr, int value, size_t end);
 	
 		// deque
 		void fordJohnsonDeque(std::deque<int>& arr);
-    	void insertionSortDeque(std::deque<int>& arr, int left, int right);
-    	void mergeDeque(std::deque<int>& arr, int left, int mid, int right);
+    	std::deque<int> mergePairsDeque(std::deque<std::pair<int, int> >& pairs);
+    	void insertPendingDeque(std::deque<int>& mainChain, const std::deque<int>& pend);
+    	size_t binarySearchDeque(const std::deque<int>& arr, int value, size_t end);
 	
-		void printSequence(const std::string& prefix, const std::vector<int>& data, size_t maxDisplay = 5);
-		
-		public:
-		PmergeMe();
-		PmergeMe(const PmergeMe &copy);
-		PmergeMe& operator=(const PmergeMe &other);
-		~PmergeMe();
+		template <typename Container>
+		void printSequence(const std::string& prefix, const Container&, size_t maxDisplay = 5);
 
-		void run(int argc, char** argv);
+		public:
+			PmergeMe();
+			PmergeMe(const PmergeMe &copy);
+			PmergeMe& operator=(const PmergeMe &other);
+			~PmergeMe();
+
+			void run(int argc, char** argv);
 };
 
 
