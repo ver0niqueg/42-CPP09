@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/22 15:08:17 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/22 15:11:01 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -311,7 +311,7 @@ std::deque<int> PmergeMe::mergePairsDeque(std::deque<std::pair<int, int> >& pair
 		if (leftSorted[i] <= rightSorted[j++]) 
 			result.push_back(leftSorted[i++]);
 		else
-			result.push_back(rightSorted[j++])
+			result.push_back(rightSorted[j++]);
 	}
 
 	while (i < leftSorted.size())
