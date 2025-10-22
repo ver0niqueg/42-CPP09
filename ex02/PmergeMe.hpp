@@ -32,7 +32,6 @@ class PmergeMe
 		std::vector<int> _vectorData;
 		std::deque<int> _dequeData;
 
-		// parsing
 		bool isValidNumber(const std::string& str);
 		void parseInput(int argc, char** argv);
 
@@ -53,13 +52,13 @@ class PmergeMe
 		template <typename Container>
 		void printSequence(const std::string& prefix, const Container&);
 
-		public:
-			PmergeMe();
-			PmergeMe(const PmergeMe &copy);
-			PmergeMe& operator=(const PmergeMe &other);
-			~PmergeMe();
+	public:
+		PmergeMe();
+		PmergeMe(const PmergeMe &copy);
+		PmergeMe& operator=(const PmergeMe &other);
+		~PmergeMe();
 
-			void run(int argc, char** argv);
+		void execute(int argc, char** argv);
 };
 
 

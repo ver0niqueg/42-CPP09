@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/22 15:15:21 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/22 15:32:08 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/22 18:33:13 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,7 @@ int main(int argc, char** argv)
     try
     {
         PmergeMe sorter;
-        sorter.run(argc, argv);
+        sorter.execute(argc, argv);
     }
     catch(const std::exception& e)
     {
