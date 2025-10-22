@@ -23,6 +23,8 @@
 #include <sys/time.h>
 #include <climits>
 #include <iomanip>
+#include <algorithm>
+#include <set>
 
 class PmergeMe
 {
@@ -49,7 +51,7 @@ class PmergeMe
     	size_t binarySearchDeque(const std::deque<int>& arr, int value, size_t end);
 	
 		template <typename Container>
-		void printSequence(const std::string& prefix, const Container&, size_t maxDisplay = 5);
+		void printSequence(const std::string& prefix, const Container&);
 
 		public:
 			PmergeMe();

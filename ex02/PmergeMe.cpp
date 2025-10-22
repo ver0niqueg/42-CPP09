@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/22 15:11:01 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/22 16:38:21 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ bool PmergeMe::isValidNumber(const std::string& str)
 		
 	for (size_t i = 0; i < str.length(); i++)
 	{
-		if (i != isdigit(str[i]))
+		if (!isdigit(static_cast<unsigned char>(str[i])))
 			return false;
 	}
 
@@ -54,23 +54,27 @@ bool PmergeMe::isValidNumber(const std::string& str)
 
 void PmergeMe::parseInput(int argc, char** argv)
 {
-	if (argc < 2)
-		throw std::runtime_error("Error: wrong number of arguments");
-	
-	for (int i = 0; i < argc; i++)
-	{
-		std::string arg(argv[i]);
-	
-		if (!isValidNumber(arg))
-			throw std::runtime_error("Error: invalid input");
-		
-		int nb = atoi(arg.c_str());
-		_vectorData.push_back(nb);
-		_dequeData.push_back(nb);
-	}
-	
-	if (_vectorData.empty())
-		throw std::runtime_error("Error: empty sequence");
+    if (argc < 2)
+        throw std::runtime_error("Error: no input sequence provided");
+    
+    std::set<int> seen;
+    for (int i = 1; i < argc; i++)
+    {
+        std::string arg(argv[i]);
+        if (!isValidNumber(arg))
+            throw std::runtime_error("Error: invalid input");
+        
+        int nb = atoi(arg.c_str());
+        if (seen.count(nb))
+            throw std::runtime_error("Error: duplicate input");
+        seen.insert(nb);
+
+        _vectorData.push_back(nb);
+        _dequeData.push_back(nb);
+    }
+    
+    if (_vectorData.empty())
+        throw std::runtime_error("Error: empty sequence");
 }
 
 // retourne une valeur d'indices pour pouvoir savoir l'ordre d'insertion des elements restants
@@ -99,6 +103,8 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 		j_prev2 = j_prev1;
 		j_prev1 = j_next;
 	}
+	
+	return jacobsthal;
 }
 
 // ============= [ VECTOR IMPLEMENTATION ] =============/
@@ -135,8 +141,8 @@ std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& p
 	}
 	
 	size_t mid = pairs.size() / 2;
-	std::vector<std::pair<int, int>> left(pairs.begin(), pairs.begin() + mid);
-	std::vector<std::pair<int, int>> right(pairs.begin() + mid, pairs.end());
+	std::vector<std::pair<int, int> > left(pairs.begin(), pairs.begin() + mid);
+	std::vector<std::pair<int, int> > right(pairs.begin() + mid, pairs.end());
 
 	std::vector<int> leftSorted = mergePairsVector(left); // les + grands elements
 	std::vector<int> rightSorted = mergePairsVector(right);
@@ -214,7 +220,7 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 		return ;
 	
 	// first step: make pairs and sort each one
-	std::vector<std::pair<int, int>> pairs;
+	std::vector<std::pair<int, int> > pairs;
 	bool hasStraggler = (n % 2 != 0);
 	int straggler = hasStraggler ? arr[n - 1] : 0;
 
@@ -236,14 +242,10 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 
 	if (!pairs.empty())
 	{
-		// trouver le + petit element de la premiere paire
-		for (size_t i = 0; i < pairs.size(); i ++)
+		// ajouter tous les petits elements des paires dans pend
+		for (size_t i = 0; i < pairs.size(); i++)
 		{
-			if (pairs[i].second == mainChain[0])
-			{
-				pend.push_back(pairs[i].first);
-				break;
-			}
+			pend.push_back(pairs[i].first);
 		}
 	}
 	
@@ -286,40 +288,40 @@ size_t PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, size_t
 // fonction qui prends en entree des paires d'entrees et qui retourne un vecteur de grands elements
 std::deque<int> PmergeMe::mergePairsDeque(std::deque<std::pair<int, int> >& pairs)
 {
-	if (pairs.empty())
-		return std::deque<int>();
+    if (pairs.empty())
+        return std::deque<int>();
 
-	if (pairs.size() == 1)
-	{
-		std::deque<int> result;
-		result.push_back(pairs[0].second);
-		return result;
-	}
-	
-	size_t mid = pairs.size() / 2;
-	std::deque<std::pair<int, int>> left(pairs.begin(), pairs.begin() + mid);
-	std::deque<std::pair<int, int>> right(pairs.begin(), mid + pairs.end());
+    if (pairs.size() == 1)
+    {
+        std::deque<int> result;
+        result.push_back(pairs[0].second);
+        return result;
+    }
+    
+    size_t mid = pairs.size() / 2;
+    std::deque<std::pair<int, int> > left(pairs.begin(), pairs.begin() + mid);
+    std::deque<std::pair<int, int> > right(pairs.begin() + mid, pairs.end());
 
-	std::deque<int> leftSorted = mergePairsDeque(left);
-	std::deque<int> rightSorted = mergePairsDeque(right);
-	
-	std::deque<int> result;
-	size_t i = 0, j = 0;
+    std::deque<int> leftSorted = mergePairsDeque(left);
+    std::deque<int> rightSorted = mergePairsDeque(right);
+    
+    std::deque<int> result;
+    size_t i = 0, j = 0;
 
-	while (leftSorted.size() < rightSorted.size())
-	{
-		if (leftSorted[i] <= rightSorted[j++]) 
-			result.push_back(leftSorted[i++]);
-		else
-			result.push_back(rightSorted[j++]);
-	}
+    while (i < leftSorted.size() && j < rightSorted.size())
+    {
+        if (leftSorted[i] <= rightSorted[j]) 
+            result.push_back(leftSorted[i++]);
+        else
+            result.push_back(rightSorted[j++]);
+    }
+    // ajouter les restes correctement
+    while (i < leftSorted.size())
+        result.push_back(leftSorted[i++]);
+    while (j < rightSorted.size())
+        result.push_back(rightSorted[j++]);
 
-	while (i < leftSorted.size())
-		result.push_back(leftSorted[i++]);
-	while (j < rightSorted.size())
-		result.push_back(rightSorted[j++]);
-
-	return result;
+    return result;
 }
 
 void PmergeMe::insertPendingDeque(std::deque<int>& mainChain, const std::deque<int>& pend)
@@ -339,7 +341,7 @@ void PmergeMe::insertPendingDeque(std::deque<int>& mainChain, const std::deque<i
 		if (currentJacob > pend.size())
 			currentJacob = pend.size();
 		
-		for (size_t j = currentJacob; j < lastPos && j > 0; j--)
+		for (size_t j = currentJacob; j > lastPos && j > 0; j--)
 			insertionOrder.push_back(j - 1);
 		
 		lastPos = currentJacob;
@@ -364,74 +366,66 @@ void PmergeMe::insertPendingDeque(std::deque<int>& mainChain, const std::deque<i
 
 void PmergeMe::fordJohnsonDeque(std::deque<int>& arr)
 {
-	size_t n = arr.size();
-	if (n <= 1)
-		return ;
-	
-	// make pairs and sort each one
-	std::deque<std::pair<int, int>> pairs;
-	bool hasStraggler = (n % 2 != 0);
-	int straggler = hasStraggler ? arr[n - 1] : 0;
-	
-	for (size_t i = 0; i + 1 < n; i+= 2)
-	{
-		int a = arr[i];
-		int b = arr[i + 1];
-		if (a > b)
-			pairs.push_back(std::make_pair(b, a));
-		else
-			pairs.push_back(std::make_pair(a, b));
-	}
-	
-	// recursive sorting
-	std::deque<int> mainChain = mergePairsDeque(pairs);
-	
-	std::deque<int> pend;
+    size_t n = arr.size();
+    if (n <= 1)
+        return ;
+    
+    // make pairs and sort each one
+    std::deque<std::pair<int, int> > pairs;
+    bool hasStraggler = (n % 2 != 0);
+    int straggler = hasStraggler ? arr[n - 1] : 0;
+    
+    for (size_t i = 0; i + 1 < n; i+= 2)
+    {
+        int a = arr[i];
+        int b = arr[i + 1];
+        if (a > b)
+            pairs.push_back(std::make_pair(b, a));
+        else
+            pairs.push_back(std::make_pair(a, b));
+    }
+    
+    // recursive sorting
+    std::deque<int> mainChain = mergePairsDeque(pairs);
+    
+    std::deque<int> pend;
 
-	if (!pairs.empty())
-	{
-		for (size_t i = 0; i < pairs.size(); i++)
-		{
-			if (pairs[i].second == mainChain[0])
-			{
-				pend.push_back(pairs[i].first);
-				break;
-			}
-		}
-	}
+    if (!pairs.empty())
+    {
+        // remplir le pend (les petits éléments)
+        for (size_t i = 0; i < pairs.size(); i++)
+        {
+            pend.push_back(pairs[i].first);
+        }
+        // insérer le premier petit au début de la chaîne principale
+        if (!pend.empty())
+        {
+            mainChain.insert(mainChain.begin(), pend.front());
+            pend.pop_front();
+        }
+    }
 
-	if (!pend.empty())
-	{
-		mainChain.insert(mainChain.begin(), pend[0]);
-		pend.erase(pend.begin());
-	}
+    insertPendingDeque(mainChain, pend);
 
-	insertPendingDeque(mainChain, pend);
-
-	if (hasStraggler)
-	{
-		size_t pos = binarySearchDeque(mainChain, straggler, mainChain.size());
-		mainChain.insert(mainChain.begin() + pos, straggler);
-	}
-	arr = mainChain;
+    if (hasStraggler)
+    {
+        size_t pos = binarySearchDeque(mainChain, straggler, mainChain.size());
+        mainChain.insert(mainChain.begin() + pos, straggler);
+    }
+    arr = mainChain;
 }
-
-
 // ============= [ DISPLAY ] =============/
 template <typename Container>
-void PmergeMe::printSequence(const std::string& prefix, const Container&, size_t maxDisplay = 5)
+void PmergeMe::printSequence(const std::string& prefix, const Container& data)
 {
 	std::cout << prefix;
-	size_t displayCount = (data.size() > maxDisplay) ? maxDisplay : data.size(); // ajustement
-	for (size_t i = 0; i < displaycount; i++)
+	for (size_t i = 0; i < data.size(); i++)
 	{
-			std::cout << data[i];
-			if (i < displayCount - 1)
-				std::cout << " ";
+		std::cout << data[i];
+		if (i < data.size() - 1)
+			std::cout << " ";
 	}
-
-	if (data.size() > maxDisplay)
-		std::cout << "[...]" << std::endl;
+	std::cout << std::endl;
 }
 
 // ============= [ RUN ] =============/
@@ -440,7 +434,7 @@ void PmergeMe::run(int argc, char** argv)
 {
 	parseInput(argc, argv);
 
-	printSequence("Before: ", _vectorData, 5);
+	printSequence("Before: ", _vectorData);
 
 	struct timeval start, end;
 	gettimeofday(&start, NULL);
@@ -451,7 +445,7 @@ void PmergeMe::run(int argc, char** argv)
 	double vectorTime = (end.tv_sec - start.tv_sec) * 1000000.0;
 	vectorTime += (end.tv_usec - start.tv_usec);
 
-	gettimeofday(&end, NULL);
+	gettimeofday(&start, NULL);
 
 	fordJohnsonDeque(_dequeData);
 
@@ -459,7 +453,7 @@ void PmergeMe::run(int argc, char** argv)
 	double dequeTime = (end.tv_sec - start.tv_sec) * 1000000.0;
 	dequeTime += (end.tv_usec - start.tv_usec);
 
-	printSequence("After: ", _vectorData, 5);
+	printSequence("After: ", _vectorData);
 
 	std::cout << std::fixed << std::setprecision(5);
 	std::cout << "Time to process a range of " << _vectorData.size()
