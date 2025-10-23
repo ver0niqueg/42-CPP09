@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:51:31 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/16 18:15:52 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/23 13:01:34 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@
 #include <sstream>
 #include <cstdlib>
 #include <string>
-#include <map> // conteneur STL
+#include <map>
 
 class BitcoinExchange
 {

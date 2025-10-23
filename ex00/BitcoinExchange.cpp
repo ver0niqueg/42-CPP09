@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/14 17:51:43 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/20 17:36:50 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/23 15:43:53 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,7 +77,7 @@ bool BitcoinExchange::isValidNumber(const std::string &str, float& value)
 {
 	char *endptr;
 
-	value = strtof(str.c_str(), &endptr); // str to float
+	value = strtof(str.c_str(), &endptr);
 	if (endptr == str.c_str())
 		return false;
 
@@ -97,7 +97,7 @@ bool BitcoinExchange::loadDatabase(const std::string filename)
 	}
 	
 	std::string line;
-	std::getline(file, line); // skip first line
+	std::getline(file, line);
 	while (std::getline(file, line))
 	{
 		size_t pos = line.find(',');
@@ -106,16 +106,16 @@ bool BitcoinExchange::loadDatabase(const std::string filename)
 		std::string date = trim(line.substr(0, pos));
 		std::string valueStr = trim(line.substr(pos + 1));
 		
-		float value = static_cast<float>(atof(valueStr.c_str())); // std::string to const char, to double, to float
+		float value = static_cast<float>(atof(valueStr.c_str()));
 		_database[date] = value;
 	}
 	file.close();
 	return true;
 }
-/* recevoir une date sous forme de chaine et chercher dans la base de donnees la valeur correspondante */
+
 float BitcoinExchange::getPrice(const std::string& date) const
 {
-	std::map<std::string, float>::const_iterator it = _database.lower_bound(date); // access to the first date
+	std::map<std::string, float>::const_iterator it = _database.lower_bound(date);
 		if (it == _database.end())
 		{
 			if (!_database.empty())
@@ -144,10 +144,8 @@ void BitcoinExchange::processInput(const std::string& filename)
 		std::cerr << "Error: could not open file." << std::endl;
 		return ;
 	}
-
 	std::string line;
 	std::getline(file, line);
-
 	while (std::getline(file, line))
 	{
 		size_t pos = line.find('|');
@@ -158,20 +156,17 @@ void BitcoinExchange::processInput(const std::string& filename)
 		}
 		std::string date = trim(line.substr(0, pos));
 		std::string valueStr = trim(line.substr(pos + 1));
-
 		if (!isValidDate(date))
 		{
 			std::cerr << "Error: invalid input => " << date << std::endl;
 			continue;
 		}
-
 		float value;
 		if (!isValidNumber(valueStr, value))
 		{
 			std::cerr << "Error: invalid input => " << trim(line) << std::endl;
 			continue; 
 		}
-
 		if (value < 0)
 		{
 			std::cerr << "Error: must be a positive number." << std::endl;
@@ -182,7 +177,6 @@ void BitcoinExchange::processInput(const std::string& filename)
 			std::cerr << "Error: number is too large." << std::endl;
 			continue;
 		}
-
 		float rate = getPrice(date);
 		float result = value * rate;
 		std::cout << date << " => " << value << " = " << result << std::endl;
