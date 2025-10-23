@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 19:29:47 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/20 17:56:43 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/23 17:15:50 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,15 +54,13 @@ int RPN::processRPN(const std::string& expression)
 	if (expression.empty())
 		throw std::runtime_error("Error: empty expression");
 	
-	std::istringstream iss(expression); // flux d'entree qui lit depuis une chaine de caracteres
-	std::string token; // va contenir chaque mot ou symbole extrait de la chaine
+	std::istringstream iss(expression);
+	std::string token;
 
 	while (iss >> token)
 	{
-		// si c'est un chiffre on l'empile
 		if (token.length() == 1 && isdigit(token[0]))
 			_stack.push(token[0] - '0');
-		// si c'est un operateur
 		else if (token.length() == 1 && isOperator(token[0]))
 		{
 			if (_stack.size() < 2)

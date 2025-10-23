@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/16 19:29:53 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/20 17:56:20 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/23 17:22:46 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ int main(int argc, char** argv)
 		std::cerr << "Usage: ./RPN \"expression\"" << std::endl;
 		return (1);
 	}
-	
 	try
 	{
 		RPN rpn;
