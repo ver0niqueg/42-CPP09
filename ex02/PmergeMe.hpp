@@ -38,16 +38,16 @@ class PmergeMe
 		std::vector<size_t> generateJacobsthalSequence(size_t n);
 
 		// vector
+		size_t binarySearchVector(const std::vector<int>& arr, int value, size_t end);
+		std::vector<int> mergePairsVector(std::vector<std::pair<int, int> >& pairs);
+		void insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pend);
 		void fordJohnsonVector(std::vector<int>& arr);
-    	std::vector<int> mergePairsVector(std::vector<std::pair<int, int> >& pairs);
-    	void insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pend);
-    	size_t binarySearchVector(const std::vector<int>& arr, int value, size_t end);
 	
 		// deque
+		size_t binarySearchDeque(const std::deque<int>& arr, int value, size_t end);
+		std::deque<int> mergePairsDeque(std::deque<std::pair<int, int> >& pairs);
+		void insertPendingDeque(std::deque<int>& mainChain, const std::deque<int>& pend);
 		void fordJohnsonDeque(std::deque<int>& arr);
-    	std::deque<int> mergePairsDeque(std::deque<std::pair<int, int> >& pairs);
-    	void insertPendingDeque(std::deque<int>& mainChain, const std::deque<int>& pend);
-    	size_t binarySearchDeque(const std::deque<int>& arr, int value, size_t end);
 	
 		template <typename Container>
 		void printSequence(const std::string& prefix, const Container&);
@@ -60,6 +60,5 @@ class PmergeMe
 
 		void execute(int argc, char** argv);
 };
-
 
 #endif

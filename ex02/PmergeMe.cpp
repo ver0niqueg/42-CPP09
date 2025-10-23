@@ -6,13 +6,11 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/22 18:33:06 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/23 18:08:08 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "PmergeMe.hpp"
-
-// ============= [ CONSTRUCTOR / COPY / ASSIGNMENT / DESTRUCTOR ] =============/
 
 PmergeMe::PmergeMe() {}
 
@@ -29,8 +27,6 @@ PmergeMe& PmergeMe::operator=(const PmergeMe &other)
 }
 
 PmergeMe::~PmergeMe() {}
-
-// ============= [ UTILS ] =============/
 
 bool PmergeMe::isValidNumber(const std::string& str)
 {
@@ -77,7 +73,9 @@ void PmergeMe::parseInput(int argc, char** argv)
         throw std::runtime_error("Error: empty sequence");
 }
 
-// retourne une valeur d'indices pour pouvoir savoir l'ordre d'insertion des elements restants
+/* Generates the Jacobsthal sequence : 0, 1, 1, 3, 5, 11, 21, 43, ...
+in order to determine the insertion order for pending elements.
+It minimizes comparisons during merge-insertion sorting */
 std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 {
 	std::vector<size_t> jacobsthal;
@@ -107,9 +105,10 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 	return jacobsthal;
 }
 
-// ============= [ VECTOR IMPLEMENTATION ] =============/
+//=============== Vector Implementation ===============//
 
-// recherche dichotomique (binary search) pour trouver la position exacte d'insertion
+/* Performs a binary search on the range [0, end) of 'arr' to find
+the correct insertion position for 'value'. */
 size_t PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, size_t end)
 {
 	size_t left = 0;
@@ -126,7 +125,9 @@ size_t PmergeMe::binarySearchVector(const std::vector<int>& arr, int value, size
 	return left;
 }
 
-// fonction qui prends en entree des paires d'entrees et qui retourne un vecteur de grands elements
+/* Recursively merges pairs to produce a sorted vector of the larger elements.
+If there is only one pair, returns the larger value of that pair.
+Uses a merge sort process to combine the left and right halves. */
 std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& pairs)
 {
 	if (pairs.empty())
@@ -167,7 +168,8 @@ std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& p
 	return result;
 }
 
-// on gere la partie + petits elements avec l'ordre jacobsthal
+/* Inserts elements from 'pend' into 'mainChain' following the Jacobsthal insertion order.
+Uses binary search to find the correct position in 'mainChain' for each element. */
 void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vector<int>& pend)
 {
 	if (pend.empty())
@@ -211,10 +213,10 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 	}
 }
 
-// algo F-J
+/* Implements the Ford–Johnson (Merge-Insertion) sorting algorithm on 'arr' */
 void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 {
-	// cas de base
+	// base case
 	size_t n = arr.size();
 	if (n <= 1)
 		return ;
@@ -267,7 +269,7 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 	arr = mainChain;
 }
 
-// ============= [ DEQUE IMPLEMENTATION ] =============/
+//=============== Deque Implementation ===============//
 
 size_t PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, size_t end)
 {
@@ -285,7 +287,6 @@ size_t PmergeMe::binarySearchDeque(const std::deque<int>& arr, int value, size_t
 	return left;
 }
 
-// fonction qui prends en entree des paires d'entrees et qui retourne un vecteur de grands elements
 std::deque<int> PmergeMe::mergePairsDeque(std::deque<std::pair<int, int> >& pairs)
 {
     if (pairs.empty())
@@ -370,7 +371,6 @@ void PmergeMe::fordJohnsonDeque(std::deque<int>& arr)
     if (n <= 1)
         return ;
     
-    // make pairs and sort each one
     std::deque<std::pair<int, int> > pairs;
     bool hasStraggler = (n % 2 != 0);
     int straggler = hasStraggler ? arr[n - 1] : 0;
@@ -385,19 +385,16 @@ void PmergeMe::fordJohnsonDeque(std::deque<int>& arr)
             pairs.push_back(std::make_pair(a, b));
     }
     
-    // recursive sorting
     std::deque<int> mainChain = mergePairsDeque(pairs);
     
     std::deque<int> pend;
 
     if (!pairs.empty())
     {
-        // remplir le pend (les petits éléments)
         for (size_t i = 0; i < pairs.size(); i++)
         {
             pend.push_back(pairs[i].first);
         }
-        // insérer le premier petit au début de la chaîne principale
         if (!pend.empty())
         {
             mainChain.insert(mainChain.begin(), pend.front());
@@ -414,7 +411,7 @@ void PmergeMe::fordJohnsonDeque(std::deque<int>& arr)
     }
     arr = mainChain;
 }
-// ============= [ DISPLAY ] =============/
+
 template <typename Container>
 void PmergeMe::printSequence(const std::string& prefix, const Container& data)
 {
@@ -427,8 +424,6 @@ void PmergeMe::printSequence(const std::string& prefix, const Container& data)
 	}
 	std::cout << std::endl;
 }
-
-// ============= [ RUN ] =============/
 
 void PmergeMe::execute(int argc, char** argv)
 {
