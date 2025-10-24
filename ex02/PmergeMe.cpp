@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/24 12:18:55 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/24 15:31:35 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -210,15 +210,13 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 	}
 }
 
-/* Implements the Ford–Johnson (Merge-Insertion) sorting algorithm on 'arr' */
+/* Implements the Ford–Johnson (Merge-Insertion) sorting algorithm on 'arr' */ 
 void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 {
-	// base case
 	size_t n = arr.size();
 	if (n <= 1)
 		return ;
 	
-	// first step: make pairs and sort each one
 	std::vector<std::pair<int, int> > pairs;
 	bool hasStraggler = (n % 2 != 0);
 	int straggler = hasStraggler ? arr[n - 1] : 0;
@@ -233,15 +231,12 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 			pairs.push_back(std::make_pair(a, b));
 	}
 
-	// second step: recursive sorting of the pairs from their biggest element
 	std::vector<int> mainChain = mergePairsVector(pairs);
 	
-	// third step: create main chain and pend chain
 	std::vector<int> pend;
 
 	if (!pairs.empty())
 	{
-		// ajouter tous les petits elements des paires dans pend
 		for (size_t i = 0; i < pairs.size(); i++)
 		{
 			pend.push_back(pairs[i].first);
@@ -254,10 +249,8 @@ void PmergeMe::fordJohnsonVector(std::vector<int>& arr)
 		pend.erase(pend.begin());
 	}
 
-	// fourth step: insert pending elements according to the jacobsthal order
 	insertPendingVector(mainChain, pend);
 
-	// fifth step: insert the straggle if it exists
 	if (hasStraggler)
 	{
 		size_t pos = binarySearchVector(mainChain, straggler, mainChain.size());
