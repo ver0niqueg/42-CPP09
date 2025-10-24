@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/23 18:08:08 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/24 12:18:55 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -81,11 +81,11 @@ std::vector<size_t> PmergeMe::generateJacobsthalSequence(size_t n)
 	std::vector<size_t> jacobsthal;
 	
 	if (n == 0)
-		return jacobsthal; // vecteur vide
+		return jacobsthal;
 	
 	jacobsthal.push_back(0);
 	if (n == 1)
-		return jacobsthal; // vecteur retourne 0
+		return jacobsthal;
 
 	jacobsthal.push_back(1);
 	
@@ -133,7 +133,6 @@ std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& p
 	if (pairs.empty())
 		return std::vector<int>();
 	
-	// une paire = on retourne le + grand
 	if (pairs.size() == 1)
 	{
 		std::vector<int> result;
@@ -145,7 +144,7 @@ std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& p
 	std::vector<std::pair<int, int> > left(pairs.begin(), pairs.begin() + mid);
 	std::vector<std::pair<int, int> > right(pairs.begin() + mid, pairs.end());
 
-	std::vector<int> leftSorted = mergePairsVector(left); // les + grands elements
+	std::vector<int> leftSorted = mergePairsVector(left);
 	std::vector<int> rightSorted = mergePairsVector(right);
 
 	std::vector<int> result;
@@ -178,14 +177,14 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 	std::vector<size_t> jacobsthal = generateJacobsthalSequence(pend.size() + 1);
 	
 	std::vector<size_t> insertionOrder;
-	size_t lastPos = 0; // garde la dernier position traitee pour eviter de repeter les elements
+	size_t lastPos = 0;
 	
-	for (size_t i = 2; i < jacobsthal.size(); i++) // on ignore les 2 premiers elements de jacob -> utilise pour le premier petit associe
+	for (size_t i = 2; i < jacobsthal.size(); i++)
 	{
 		size_t currentJacob = jacobsthal[i];
 
 		if (currentJacob > pend.size())
-			currentJacob = pend.size(); // ajustement
+			currentJacob = pend.size();
 		
 		for (size_t j = currentJacob; j > lastPos && j > 0; j--)
 			insertionOrder.push_back(j - 1);
@@ -195,11 +194,10 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 		if (lastPos >= pend.size())
 			break;
 	}
-	// tous les indices restants de pend (non encore dans insertionOrder) sont ajoutes a la fin
+
 	for (size_t i = lastPos; i < pend.size(); i++)
 		insertionOrder.push_back(i);
 	
-	// inserer les petits elements dans mainChain
 	for (size_t i = 0; i < insertionOrder.size(); i++)
 	{
 		size_t idx = insertionOrder[i];
@@ -209,7 +207,6 @@ void PmergeMe::insertPendingVector(std::vector<int>& mainChain, const std::vecto
 			size_t pos = binarySearchVector(mainChain, value, mainChain.size());
 			mainChain.insert(mainChain.begin() + pos, value);
 		}
-		// tous les petits elements ont ete inseres selon l'ordre jacobsthal
 	}
 }
 
