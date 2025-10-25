@@ -6,7 +6,7 @@
 /*   By: vgalmich <vgalmich@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/10/21 13:12:23 by vgalmich          #+#    #+#             */
-/*   Updated: 2025/10/24 15:31:35 by vgalmich         ###   ########.fr       */
+/*   Updated: 2025/10/25 13:56:51 by vgalmich         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -150,7 +150,6 @@ std::vector<int> PmergeMe::mergePairsVector(std::vector<std::pair<int, int> >& p
 	std::vector<int> result;
 	size_t i = 0, j = 0;
 
-	// fusion
 	while (i < leftSorted.size() && j < rightSorted.size())
 	{
 		if (leftSorted[i] <= rightSorted[j])
@@ -306,7 +305,6 @@ std::deque<int> PmergeMe::mergePairsDeque(std::deque<std::pair<int, int> >& pair
         else
             result.push_back(rightSorted[j++]);
     }
-    // ajouter les restes correctement
     while (i < leftSorted.size())
         result.push_back(leftSorted[i++]);
     while (j < rightSorted.size())
